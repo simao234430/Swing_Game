@@ -2,12 +2,23 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
-
+import java.io.FileReader;
+import java.net.URI;
+import javax.imageio.ImageIO;
 /**
  * Created by simao on 2018/6/5.
  */
 public class GameWindow extends JFrame{
+    public JPanel getImagePanel() {
+        return imagePanel;
+    }
+
+    public void setImagePanel(JPanel imagePanel) {
+        this.imagePanel = imagePanel;
+    }
+
     private JPanel imagePanel;
     //    private static final long ser
     JPanel messagePanel;
@@ -32,19 +43,29 @@ public class GameWindow extends JFrame{
 
     public GameWindow(){
         setTitle("拼图小游戏");
-
-        setSize(400,300);
+        //setSize(400,300);
         setLayout(new BorderLayout());
         creatMenu();
         setJMenuBar(bar);
-        controlPanel = new ControlGamePanel();
+
+        //加载默认图片
+        try{
+            URI uri = GameWindow.class.getClassLoader().getResource("image/qq.jpg").toURI();
+            File file = new File(uri);
+            image = ImageIO.read(file);
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
+
+        controlPanel = new ControlGamePanel(this);
         controlPanel.setBackground(Color.blue);
         creatMessagePanel();
         puzzlePanel = new PuzzlePanel(this);
         puzzlePanel.initPanel();
-        puzzlePanel.setBackground(Color.green);
+//        puzzlePanel.setBackground(Color.green);
         imagePanel = new JPanel();
-        imagePanel.setBackground(Color.CYAN);
+//        imagePanel.setBackground(Color.CYAN);
         imagePanel.setBorder(new EtchedBorder());
         imagePanel.setPreferredSize(new Dimension(240,120));
         add(controlPanel,BorderLayout.SOUTH);
@@ -52,8 +73,10 @@ public class GameWindow extends JFrame{
         add(puzzlePanel,BorderLayout.CENTER);
         add(imagePanel,BorderLayout.EAST);
 
+
+
         //setSize(new Dimension(400,200));
-        setSize(new Dimension(Cell.WIDTH * column + 240,Cell.HEIGHT*row + 120));
+        setSize(new Dimension(Cell.WIDTH * column + 240,Cell.HEIGHT*row + 100));
         setVisible(true);
         setResizable(true);
         validate();
@@ -82,12 +105,12 @@ public class GameWindow extends JFrame{
         group1.add(qqImage);
         group1.add(flowerImage);
         group1.add(catImage);
-        group1.add(flowerImage);
+        group1.add(loadOtherImage);
 
         menuImage.add(qqImage);
         menuImage.add(flowerImage);
         menuImage.add(catImage);
-        menuImage.add(flowerImage);
+        menuImage.add(loadOtherImage);
 
         oneGradeItem = new JRadioButtonMenuItem("普通级别3x3", true);
         twoGradeItem = new JRadioButtonMenuItem("高级级别4x4", false);
@@ -183,6 +206,7 @@ public class GameWindow extends JFrame{
 
 
     public static void main(String[] args){
+
         new GameWindow();
     }
 }
