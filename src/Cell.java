@@ -43,4 +43,14 @@ public class Cell extends JButton{
     public void setButtonImage(Image buttonImage) {
         this.buttonImage = buttonImage;
     }
+
+    public boolean isNeighborNullCell(Cell nullCell) {
+        Point currentCellPoint = this.getButtonPoint();
+        Point nullCellPoint = nullCell.getButtonPoint();
+        boolean c1 = Math.abs(currentCellPoint.getX() - nullCellPoint.getX()) == 1
+                && (currentCellPoint.getY() == nullCellPoint.getY());
+        boolean c2 = Math.abs(currentCellPoint.getY() - nullCellPoint.getY()) == 1
+                && (currentCellPoint.getX() == nullCellPoint.getX());
+        return (c1 || c2);
+    }
 }

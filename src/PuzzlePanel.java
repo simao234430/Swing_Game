@@ -65,4 +65,27 @@ public class PuzzlePanel extends JPanel {
     public Cell[][] getCells() {
         return cells;
     }
+
+    public boolean isFinished() {
+
+        boolean b = true;
+        mark: for(int i = 0;i<row;i++){
+            if(i<row-1){
+                for(int j = 0;j<column;j++){
+                    if(!(cells[i][j].getButtonImage() == cellImages[i][j])){
+                        b = false;
+                        break mark;
+                    }
+                }
+            }else{
+                for(int j = 0;j<column-1;j++){
+                    if(!(cells[i][j].getButtonImage() == cellImages[i][j])){
+                        b = false;
+                        break mark;
+                    }
+                }
+            }
+        }
+        return  b;
+    }
 }

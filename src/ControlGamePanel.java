@@ -1,7 +1,10 @@
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -62,7 +65,7 @@ public class ControlGamePanel extends JPanel implements ActionListener{
 
             noImageCell.setButtonImage(null);
             noImageCell.updateUI();
-
+            MoveListener l = new MoveListener();
             Collections.shuffle(imageList);
             int k=0;
 
@@ -74,13 +77,54 @@ public class ControlGamePanel extends JPanel implements ActionListener{
                     cells[i][j].setButtonImage(imageList.get(k));
                     cells[i][j].repaint();
                     cells[i][j].updateUI();
-//                    cells[i][j].addMouseListener(l);
+                    cells[i][j].addMouseListener(l);
                     k++;
                 }
             }
 
+            noImageCell.addMouseListener(l);
+            puzzlePanel.validate();
+
 
         }else if(e.getSource() == buttonPreview){
+
+        }
+    }
+
+    private class MoveListener implements MouseListener {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            Cell currentCell = (Cell)e.getSource();
+            if(currentCell.isNeighborNullCell(noImageCell)){
+                Image img = currentCell.getButtonImage();
+                noImageCell.setButtonImage(img);
+                noImageCell.requestFocus();
+                noImageCell = currentCell;
+                noImageCell.setButtonImage(null);
+            }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            if(puzzlePanel.isFinished()){
+                cells[row -1][column-1].setButtonImage(lastCell.getButtonImage());
+//                puzzlePanel.requestFocus();
+                JOptionPane.showMessageDialog(null,"过关");
+            }
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
 
         }
     }
